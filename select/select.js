@@ -1,16 +1,20 @@
-const getTemplate = () => {
+const getTemplate = (data = [], placeholder) => {
+    const text = placeholder ?? '--Select--';
+
+    const items = data.map(item => {
+        return `
+            <li class="select__item" data-type="item" data-value="${item.id}">${item.value}</li>
+        `
+    });
+
     return `
         <div class="select__input" data-type="input">
-                <span>Hello</span>
-                <i class="fa fa-chevron-down" data-ty></i>
+                <span>${text}</span>
+                <i class="fa fa-chevron-down" data-type="arrow"></i>
             </div>
             <div class="select__dropdown">
                 <ul class="select__list">
-                    <li class="select__item">item-1</li>
-                    <li class="select__item">item-2</li>
-                    <li class="select__item">item-3</li>
-                    <li class="select__item">item-4</li>
-                    <li class="select__item">item-5</li>
+                    ${items.join('')}
                 </ul>
             </div>
     `;
@@ -19,14 +23,16 @@ const getTemplate = () => {
 export class Select {
     constructor(selector, options) {
         this.$el = document.querySelector(selector);
-        this.$arrow = document.querySelector(selector);
+        this.options = options;
+
         this.#render();
         this.#setup();
     }
 
     #render() {
+        const {placeholder, data} = this.options;
         this.$el.classList.add('select');
-        this.$el.innerHTML = getTemplate();
+        this.$el.innerHTML = getTemplate(data, placeholder);
     }
 
     #setup() {
@@ -57,8 +63,8 @@ export class Select {
     }
     close() {
         this.$el.classList.remove('open');
-        this.$arrow.classList.add('fa-chevron-up')
-        this.$arrow.classList.remove('fa-chevron-down')
+        this.$arrow.classList.add('fa-chevron-down')
+        this.$arrow.classList.remove('fa-chevron-up')
     }
     destroy() {
         this.$el.removeEventListener('click', this.clickHandler)
