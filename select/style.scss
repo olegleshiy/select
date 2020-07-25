@@ -15,7 +15,7 @@ body::-webkit-scrollbar-track {
 
 body::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background-color: #999797;
+  background-color: $grey3;
   outline: 1px solid $grey;
 }
 
@@ -30,18 +30,68 @@ body::-webkit-scrollbar-thumb {
 }
 
 .select {
+  z-index: 2;
   width: 100%;
   position: relative;
+  margin: 20px 0;
+
+  .arrow {
+    width: 1rem;
+    height: 1rem;
+    display: inline-block;
+    position: relative;
+  }
+  .arrow span {
+    top: 0.5rem;
+    position: absolute;
+    width: 0.6rem;
+    height: 1px;
+    background-color: $grey3;
+    display: inline-block;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+  }
+  .arrow span:first-of-type {
+    left: 0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  .arrow span:last-of-type {
+    right: 0;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
 
   &.open {
+    z-index: 5;
     .select__dropdown {
       display: block;
     }
     .select__input {
       border-bottom: none;
     }
+    .select__drop {
+      display: block;
+    }
+    .arrow span:first-of-type {
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+    }
+    .arrow span:last-of-type {
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
   }
-
+  &__drop {
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    z-index: -1;
+  }
   &__input {
     border: 1px solid $grey;
     height: $height;
@@ -69,8 +119,17 @@ body::-webkit-scrollbar-thumb {
     list-style: none;
   }
   &__item {
-    padding: 1rem;
+    padding: 0.62rem 1rem;
     border-bottom: 1px solid $grey;
+    background-color: $white;
+
+    &.selected {
+      background-color: $grey2;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
 
     &:hover {
       background-color: $grey2;
